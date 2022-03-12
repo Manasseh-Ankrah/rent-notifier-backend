@@ -1,0 +1,37 @@
+GET  http://4e2a-197-251-240-150.ngrok.io/admin/ HTTP/1.1
+# content-type: application/json
+
+
+
+###
+POST http://10.105.2.111:5000/admin/register HTTP/1.1
+content-type: application/json
+
+{ 
+  "username":"man", 
+  "email":"man@gmail.com",
+  "password":"12345", 
+  "confirmPassword":"12345" 
+}
+
+
+###
+
+GET  http://10.105.2.111:5000/tenant/ HTTP/1.1
+
+###
+
+PATCH  http://10.105.2.111:5000/tenant/622a6ca3ef01a207acbd0000 HTTP/1.1
+content-type: application/json
+
+{ 
+  "tenant": "David Ashong",
+  "location": "East Airport",
+  "propType": "3 Bedroom Apartment",
+  "startDate": "3/9/2022",
+  "dueDate": "3/9/2023",
+  "notificationDate": "3/1/2023",
+  "nDay": 1,
+  "nMonth": 3,
+  "nYear": 2023
+}
