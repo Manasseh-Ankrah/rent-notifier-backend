@@ -17,15 +17,15 @@ content-type: application/json
 
 ###
 
-GET  http://10.105.2.111:5000/tenant/ HTTP/1.1
+GET  http://10.57.137.252/:5000/tenant/62354a66fbdb0aa9c534909b HTTP/1.1
 
 ###
 
-PATCH  http://10.105.2.111:5000/tenant/622a6ca3ef01a207acbd0000 HTTP/1.1
+POST   http://10.57.190.89:5000/tenant/add HTTP/1.1
 content-type: application/json
 
 { 
-  "tenant": "David Ashong",
+  "tenant": "Man Ankrah",
   "location": "East Airport",
   "propType": "3 Bedroom Apartment",
   "startDate": "3/9/2022",
@@ -33,5 +33,10 @@ content-type: application/json
   "notificationDate": "3/1/2023",
   "nDay": 1,
   "nMonth": 3,
-  "nYear": 2023
+  "nYear": 2023,
+  "initialPayment": 30,
+  "monthlyCost": 46,
+  "balance": 1,
+   "createdBy": "6228c4c53e1a11f6ba4f50b4"
 }
+

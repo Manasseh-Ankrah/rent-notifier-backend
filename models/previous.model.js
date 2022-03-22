@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const tenantSchema = new mongoose.Schema({
-    tenant: {
+const previousSchema = new mongoose.Schema({
+  tenant: {
     type: String,
     required: true,
   },
@@ -55,5 +55,5 @@ const tenantSchema = new mongoose.Schema({
   }
 });
 
-module.exports = Tenant = mongoose.model("tenant", tenantSchema);
+module.exports = Previous = mongoose.model("previous", previousSchema);
 

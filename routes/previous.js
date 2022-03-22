@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const bycrypt = require("bcrypt");
 const router = express.Router();
 const Tenant = require("../models/tenant.model");
-// const Admin = require("../models/admin.model");
+const Previous = require("../models/previous.model");
+const Admin = require("../models/admin.model");
 const auth = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -12,34 +13,36 @@ require("dotenv").config();
 // require('crypto').randomBytes(64).toString('hex')
 
 // Fetching all Tenants
-router.get("/:adminId", async(req, res) => {
+router.get("/:adminId", async (req, res) => {
   try {
-      const newTenant = await Tenant.find({"createdBy":{'$exists': true}}).then(e => {
-        const newData = e.filter(info => info.createdBy == req.params.adminId)
-        if (newData) {
-          res.status(200).send(newData)
-          console.log('tenant ==>>',newData)
-        }
-      });
-    } catch (error) {
-      res.json({ message: 'Null' });
-    }
+    const newTenant = await Previous.find({"createdBy":{'$exists': true}}).then(e => {
+      const newPrevious = e.filter(info => info.createdBy == req.params.adminId)
+      if (newPrevious) {
+        res.status(200).send(newPrevious)
+        console.log('tenant ==>>',newPrevious)
+      }
+
+    });
+  } catch (error) {
+    res.json({ message: 'Null' });
+  }
   });
 
-router.post("/add", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
-    const { tenant, location, propType, startDate,dueDate,notificationDate, nDay, nMonth, nYear, initialPayment, monthlyCost, balance, createdBy } = req.body;
+    const { tenant, location, propType, startDate,dueDate,notificationDate, nDay, nMonth, nYear, initialPayment, monthlyCost, balance ,createdBy} = req.body;
 
-    // const existingAdmin = await Admin.findOne({ email: email });
-    
-    //   Validating Register Details
+    const existingTenant = await Previous.findOne({ tenant: tenant });
+    const existingLocation = await Previous.findOne({ location: location });
+    const existingPropType = await Previous.findOne({ propType: propType });
 
-    // Checking if user has submitted the necessary information
-    if (!tenant || !location || !propType || !startDate || !dueDate || !notificationDate || !nDay || !nMonth || !nYear || !initialPayment || !monthlyCost || !balance || !createdBy) {
-      res.status(400).json({ msg: "Not all the fields has been filled" });
-    } else {
+
+    if (existingTenant || existingLocation || existingPropType) {
+      return ;
+ 
+    }else {
       // Creating a new Tenant record which is ready to be saved in the db
-      const newTenant = new Tenant({
+      const newPrevious = new Previous({
         tenant: tenant,
         location: location,
         propType: propType,
@@ -56,11 +59,13 @@ router.post("/add", async (req, res) => {
       });
 
       // Saving the user details in the db
-      const savedTenant = await newTenant
+      const savedPrevious = await newPrevious
         .save()
-        .then((tenant) => res.json(tenant))
+        .then((prev) => res.json(prev))
         .catch((err) => res.status(400).json("Error: " + err));
+    
     }
+      
   } catch (error) {
     res.status(500).json({ error });
   }
@@ -98,22 +103,22 @@ router.post("/add", async (req, res) => {
 
 
 
-// Tenant Delete Request
-router.delete("/:tenantId", async (req, res) => {
+// Previous Delete Request
+router.delete("/:previousId", async (req, res) => {
   try {
-    const getTenant = await Tenant.findById(req.params.tenantId);
-    if (!getTenant) {
-      return res.status(404).json({ msg: "Tenant not found" });
+    const getPrevious = await Previous.findById(req.params.previousId);
+    if (!getPrevious) {
+      return res.status(404).json({ msg: "Previous Notification not found" });
     }
-    await getTenant.remove();
+    await getPrevious.remove();
 
-    res.status(200).send("Tenant was deleted Successfully");
+    res.status(200).send("Notification Previous was deleted Successfully");
   } catch (error) {
     console.error(error.message);
     if (error.kind === "ObjectId") {
-      return res.status(404).json({ msg: "Tenant not found" });
+      return res.status(404).json({ msg: "Previous Notification not found" });
     }
-    res.status(500).send("Unable to delete Tenant");
+    res.status(500).send("Unable to delete Previous Notification");
   }
 });
 

@@ -4,6 +4,7 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const Admin = require("./routes/admin");
 const Tenant = require("./routes/tenant");
+const Previous = require("./routes/previous");
 
 const app = express();
 require("dotenv").config();
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use("/admin", Admin);
+app.use("/previous", Previous);
 app.use("/tenant", Tenant);
 
 app.get("/", (req, res) => {
